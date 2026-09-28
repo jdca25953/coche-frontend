@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="maincoche.js" defer></script>
+</head>
+<body>
+    <article class="cuerpo">
+        <h1>Prueba API Coches</h1>
+        <div class="selector">
+            <button onclick="cargarCoches()">Cargar</button>
+            <select id="selectorCoches">
+                <option value="-1">Seleccione un coche</option>
+            </select>
+            <button onclick="mostrarCoche()">Mostrar</button>
+        </div>
+        <article id="card"></article>
+        <div class="selector">
+            <button onclick="editarCoche()">Editar</button>
+            <button onclick="guardarCoche()">Guardar</button>
+        </div>
+    </article>
+</body>
+</html>
