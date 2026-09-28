@@ -33,7 +33,7 @@ function mostrarCoche(){
         const card = document.getElementById("card");
         card.innerHTML = "";
         card.appendChild(document.createElement("h2")).innerText = coche.modelo;
-        card.appendChild(generarInputCoche("Marca:", coche.marca));
+        card.appendChild(generarInputCoche("Marca:", coche.marca.nombre));
         card.appendChild(generarInputCoche("Precio:", coche.precio));
         card.appendChild(generarInputCoche("Matricula:", coche.matricula));
     }
@@ -52,9 +52,9 @@ function generarInputCoche(etiqueta, valor){
 }
 
 function editarCoche(){
-    const cocheTalla = document.getElementById("cocheTalla");
+    const cocheMatricula = document.getElementById("cocheMatricula");
     const cochePrecio = document.getElementById("cochePrecio");
-    cocheTalla.readOnly = false;
+    cocheMatricula.readOnly = false;
     cochePrecio.readOnly = false;
 }
 
@@ -64,11 +64,11 @@ function guardarCoche(){
         z => z.id == id
     );
 
-    const cocheTalla = document.getElementById("cocheTalla");
+    const cocheMatricula = document.getElementById("cocheMatricula");
     const cochePrecio = document.getElementById("cochePrecio");
-    cocheTalla.readOnly = true;
+    cocheMatricula.readOnly = true;
     cochePrecio.readOnly = true;
-    coche.matricula = cocheTalla.value;
+    coche.matricula = cocheMatricula.value;
     coche.precio = parseDouble(cochePrecio.value);
     //console.log(JSON.stringify(coche));
     fetch(`http://localhost:8080/coches/${id}`, {
