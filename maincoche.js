@@ -1,4 +1,5 @@
 var coches = [];
+var marcas = [];
 
 async function cargarCoches(){
 
@@ -23,8 +24,39 @@ async function cargarCoches(){
     //console.log(coches);
 }
 
-function mostrarCoche(){
+async function cargarMarcas(){
+    const respuesta = await fetch(
+        "http://localhost:8080/marca"
+    );
 
+    marcas = await respuesta.json();
+    
+    const selector = document.createElement("select");
+    selector.id = "selectorMarcas";
+    selector.innerHTML = "";
+    marcas.forEach(marca => {
+        const opcion = document.createElement("option");
+        opcion.value = marca.id;
+        opcion.textContent = marca.nombre;
+        const id = document.getElementById("selectorCoches").value;
+        if(id >= 0){
+            const coche = coches.find(
+            z => z.id == id);
+            if (opcion.textContent == coche.marca.nombre){
+                opcion.selected = true;
+            }
+        }
+        selector.appendChild(opcion);
+    });
+    selector.disabled = true;
+    const label = document.createElement("label");
+    label.innerText = "Marca";
+    label.id = "etiquetaMarca";
+    label.appendChild(selector);
+    return label;
+}
+
+async function mostrarCoche(){
     const id = document.getElementById("selectorCoches").value;
     if(id >= 0){
         const coche = coches.find(
@@ -33,9 +65,10 @@ function mostrarCoche(){
         const card = document.getElementById("card");
         card.innerHTML = "";
         card.appendChild(document.createElement("h2")).innerText = coche.modelo;
-        card.appendChild(generarInputCoche("Marca:", coche.marca.nombre));
+        card.appendChild(await cargarMarcas());
         card.appendChild(generarInputCoche("Precio:", coche.precio));
         card.appendChild(generarInputCoche("Matricula:", coche.matricula));
+        
     }
 }
 
@@ -52,8 +85,10 @@ function generarInputCoche(etiqueta, valor){
 }
 
 function editarCoche(){
+    const selectorMarca = document.getElementById("selectorMarcas");
     const cocheMatricula = document.getElementById("cocheMatricula");
     const cochePrecio = document.getElementById("cochePrecio");
+    selectorMarca.disabled = false;
     cocheMatricula.readOnly = false;
     cochePrecio.readOnly = false;
 }
@@ -66,10 +101,13 @@ function guardarCoche(){
 
     const cocheMatricula = document.getElementById("cocheMatricula");
     const cochePrecio = document.getElementById("cochePrecio");
+    const selectorMarca = document.getElementById("selectorMarcas");
     cocheMatricula.readOnly = true;
     cochePrecio.readOnly = true;
+    selectorMarca.disabled = true;
     coche.matricula = cocheMatricula.value;
-    coche.precio = parseDouble(cochePrecio.value);
+    coche.precio = parseFloat(cochePrecio.value);
+    coche.marcaId = parseInt(selectorMarca.value);
     //console.log(JSON.stringify(coche));
     fetch(`http://localhost:8080/coches/${id}`, {
         method: "PUT",
